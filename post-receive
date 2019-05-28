@@ -1,0 +1,16 @@
+#!/bin/bash
+DOMAIN=app
+DIR_GIT=/opt/git/app.git
+DIR_WWW=/usr/www/app
+
+unset GIT_INDEX_FILE
+while read oldrev newrev ref
+do
+    if [[ $ref =~ .*/master$ ]];
+    then
+        echo "Master ref received. Deploying master branch $DOMAIN to production..."
+        git --work-tree=$DIR_WWW --git-dir=$DIR_GIT checkout -f
+    else
+        echo "Ref $ref successfully received.  Doing nothing: only the master branch may be deployed on this server."
+    fi
+done
